@@ -15,25 +15,18 @@ const getBooks = () => {
 };
 
 // Register a new user
-public_users.post("/register", (req,res) => {
-  if (req.body.username && req.body.password){
-      let username = req.body.username
-      let password = req.body.password
-  
-      if (!isValid(username)) return res.status(400).json({message: "This username already existed"})
-      
-      let user = {
-        username : username,
-        password : password
-      }
-      users.push(user);
-  
-      return res.status(200).json({message: "User created successfully"});
+public_users.post("/register", (req, res) => {
+  const { username, password } = req.body;
+
+  if (username && password) {
+    if (isValid(username)) { 
+      users.push({ "username": username, "password": password });
+      return res.status(200).json({ message: "User successfully registered. Now you can login" });
+    } else {
+      return res.status(400).json({ message: "User already exists!" });
     }
-  else{
-    return res.status(400).json({message: "Please input username and password to login"});
   }
-  
+  return res.status(404).json({ message: "Unable to register user." });
 });
 
 // Task 10: Get the book list available in the shop using async-await

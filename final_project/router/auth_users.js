@@ -35,6 +35,7 @@ regd_users.post("/login", (req, res) => {
       data: username
     }, 'access', { expiresIn: 60 * 60 });
 
+    console.log(accessToken)
     // Store access token and username in session
     req.session.authorization = {
       accessToken, username
