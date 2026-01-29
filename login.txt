@@ -1,5 +1,3 @@
-curl -X POST http://localhost:5000/customer/login \
-     -H "Content-Type: application/json" \
-     -d '{"username": "user_apple", "password": "password123"}' \
-     -c apple_cookies.txt
+ curl -X POST http://localhost:5000/customer/login -H "Content-Type: application/json" -d '{"username": "user_apple", "password": "password123"}' -c apple_cookies.txt
+{"message":"User logged in successfully","accessToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoicGFzc3dvcmQxMjMiLCJpYXQiOjE3Njk3MDE4NTMsImV4cCI6MTc2OTcwNTQ1M30.3JKLFZ5RJkeN34Htmd9MyJK1GscVTd86l077BzOKU38","username":"user_apple"}
 
