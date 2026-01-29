@@ -1,0 +1,2 @@
+curl http://localhost:5000/isbn/1
+{"message":"Book succcessfully retrieved","book":"{\"author\":\"Chinua Achebe\",\"title\":\"Things Fall Apart\",\"reviews\":{}}"}                                                         
