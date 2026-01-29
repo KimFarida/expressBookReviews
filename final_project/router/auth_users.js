@@ -62,9 +62,9 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
       // check if review of that id 
       let reviews = book.reviews;
       reviews[user] = newReview;
-      console.log(books)
+      book.reviews = reviews
 
-      return res.status(201).json({message: `Reviews for ${book.title} updated sucessfully`, bookReviews : `${JSON.stringify(book.reviews)}`})
+      return res.status(201).json({message: `New review added for ${book.title} sucessfully`, reviews : `${JSON.stringify(book.reviews)}`})
 
 
     }
@@ -75,24 +75,28 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
 
 regd_users.delete("/auth/review/:isbn", (req, res) => {
   let user = req.session.authorization.username;
-  if (req.params.isbn && req.query.review){
+
+  if (req.params.isbn){
     let isbn = req.params.isbn;
     let book = books[isbn];
-
-    if(book){
-      // check if review of that id 
-      let reviews = book.reviews.filter(review=> review.user != user);
-      book.reviews = reviews;
-
-      console.log(books)
-
-      return res.status(204).json({message: `Reviews for ${book.title} -  ${user} deleted sucessfully`, bookReviews : `${JSON.stringify(book.reviews)}`})
-
-
+    
+    if (!book) {
+    return res.status(404).json({ message: "Book not found" });
     }
-    return res.status(404).json({message: 'Book not found'})
+
+    if (book.reviews && book.reviews[user]) {
+    
+    delete book.reviews[user];
+
+    return res.status(200).json({ 
+      message: `Review for ISBN ${isbn} by user ${user} deleted successfully`,
+      updatedReviews: book.reviews 
+    });
+  } else {
+    return res.status(404).json({ message: "Review not found for this user" });
   }
-  return res.status(300).json({message: ""});
+  }
+
 });
 
 module.exports.authenticated = regd_users;

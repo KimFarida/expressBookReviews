@@ -46,11 +46,11 @@ public_users.get('/', async function (req, res) {
   }
 });
 // Get book details based on ISBN
-public_users.get('/isbn/:isbn',function async (req, res) {
+public_users.get('/isbn/:isbn',async function (req, res) {
   //Write your code here
   try {
 
-    const books = getBooks;
+    const books = await getBooks;
 
     if (req.params.isbn){
       let isbn = req.params.isbn
@@ -71,21 +71,26 @@ public_users.get('/isbn/:isbn',function async (req, res) {
  });
   
 // Get book details based on author
-public_users.get('/author/:author',function async (req, res) {
+public_users.get('/author/:author',async function (req, res) {
   //Write your code here
   try {
 
-    const books = getBooks;
+    const books = await getBooks;
     if (req.params.author){
-    let author = req.params.author
-    let allBooks = Object.values(books)
+    let author = req.params.author.toLowerCase()
+    
+    const booksAuthor = Object.values(books).filter(book => 
+        book.author.toLowerCase() === author
+    );
 
-    let booksbyAuthor = allBooks.filter(book => book.author === author)
 
-    if (booksbyAuthor.length > 0)
-      return res.status(300).json({message: `Book by ${author} succcessfully retrieved`, book: JSON.stringify(booksbyAuthor)})
-    else{
-      return res.status(404).json({message: "No books by this author found"});
+    if (booksAuthor.length > 0) {
+        return res.status(200).json({
+            message: `Books with Author "${author}" successfully retrieved`, 
+            books: booksAuthor
+        });
+    } else {
+        return res.status(404).json({ message: "No books with this title found" });
     }
 
   }
@@ -99,9 +104,9 @@ public_users.get('/author/:author',function async (req, res) {
 });
 
 // Get all books based on title
-public_users.get('/title/:title',function async (req, res) {
+public_users.get('/title/:title',async function (req, res) {
   //Write your code here
-  const books = getBooks;
+  const books = await getBooks;
   try {
     if (req.params.title) {
     const title = req.params.title.toLowerCase();
@@ -135,11 +140,11 @@ public_users.get('/review/:isbn',function (req, res) {
     let isbn = req.params.isbn
     let book = books[isbn];
 
-    if (book){
-      return res.status(300).json({message: "Book Reviews succcessfully retrieved", reviews: JSON.stringify(book.reviews)});
+    if (book.reviews.length > 0){
+      return res.status(300).json({message: `Book Reviews for ${book.title} succcessfully retrieved`, reviews: JSON.stringify(book.reviews)});
     }
     else{
-      return res.status(404).json({message: "Book not found"});
+      return res.status(404).json({message: `No book reviews for  ${book.title} found`});
     }
   }
 });

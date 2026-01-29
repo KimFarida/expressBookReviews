@@ -1,4 +1,6 @@
-POST http://localhost:5000/register \ 
+curl -X POST http://localhost:5000/register \ 
      -H "Content-Type: application/json" \
      -d '{"username": "user_apple", "password": "password123"}'
 {"message":"User created successfully"}
+
+
