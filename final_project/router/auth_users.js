@@ -29,15 +29,13 @@ regd_users.post("/login", (req,res) => {
 
     if (authenticatedUser(username, password)){
       let accessToken = jwt.sign({
-      data: password
+      data: username
     }, 'access', { expiresIn: 60 * 60 });
 
     req.session.authorization = { accessToken, username }; 
 
       return res.status(200).json({
-          message: "User logged in successfully",
-          accessToken: accessToken,
-          username: username
+          message: "User logged in successfully"
       });
     }
     
@@ -89,7 +87,7 @@ regd_users.delete("/auth/review/:isbn", (req, res) => {
     
     delete book.reviews[user];
 
-    return res.status(200).send(`Reviews for the ISBN ${isbn} posted by the user ${user} deleted.`);
+    return res.status(200).send(`Reviews for the ISBN ${isbn} deleted.`);
   } else {
     return res.status(404).json({ message: "Review not found for this user" });
   }
