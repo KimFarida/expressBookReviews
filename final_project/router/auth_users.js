@@ -53,6 +53,7 @@ regd_users.post("/login", (req,res) => {
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
   let user = req.session.authorization.username;
+
   if (req.params.isbn && req.query.review){
     let isbn = req.params.isbn;
     let newReview =  req.query.review
@@ -60,17 +61,17 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
 
     if(book){
       // check if review of that id 
-      let reviews = book.reviews;
-      reviews[user] = newReview;
-      book.reviews = reviews
+      book.reviews[user] = newReview;
 
-      return res.status(201).json({message: `New review added for ${book.title} sucessfully`, reviews : `${JSON.stringify(book.reviews)}`})
-
+      return res.status(200).json({
+          message: `The review for the book with ISBN ${isbn} has been added/updated.`,
+          reviews: book.reviews 
+      });
 
     }
     return res.status(404).json({message: 'Book not found'})
   }
-  return res.status(300).json({message: ""});
+  return res.status(400).json({message: "Invalid request"});
 });
 
 regd_users.delete("/auth/review/:isbn", (req, res) => {
@@ -88,10 +89,7 @@ regd_users.delete("/auth/review/:isbn", (req, res) => {
     
     delete book.reviews[user];
 
-    return res.status(200).json({ 
-      message: `Review for ISBN ${isbn} by user ${user} deleted successfully`,
-      updatedReviews: book.reviews 
-    });
+    return res.status(200).send(`Reviews for the ISBN ${isbn} posted by the user ${user} deleted.`);
   } else {
     return res.status(404).json({ message: "Review not found for this user" });
   }

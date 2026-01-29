@@ -1,2 +1,2 @@
-curl -X PUT 'http://localhost:5000/customer/auth/review/1?review=I%20love%20this%20book!' -b apple_cookies.txt
-{"message":"New review added for Things Fall Apart sucessfully","reviews":"{\"user_banana\":\"I love this book!\",\"user_apple\":\"I love this book!\"}"}
+curl -X PUT 'http://localhost:5000/customer/auth/review/1?review=I%20love%20this%20book!' -b banana_cookies.txt
+{"message":"The review for the book with ISBN 1 has been added/updated.","reviews":{"user_banana":"I love this book!"}}
